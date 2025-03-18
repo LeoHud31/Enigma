@@ -1,7 +1,7 @@
 #class of rotor settings sets up the wiring and notches for each rotor
 class Rotor:
     def __init__(self, wiring, notch):
-        self.left = "ABCDEFGHIJLMNOPQRSTUVWXYZ"
+        self.left = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         self.right = wiring
         self.notch = notch
 

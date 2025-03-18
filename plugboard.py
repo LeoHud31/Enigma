@@ -3,8 +3,8 @@
 class plugboard:
     
     def __init__(self, pairs):
-        self.left = "ABCDEFGHIJLMNOPQRSTUVWXYZ"
-        self.right = "ABCDEFGHIJLMNOPQRSTUVWXYZ"
+        self.left = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        self.right = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         for pair in pairs:
             A = pair[0]
             B = pair[1]
