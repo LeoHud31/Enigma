@@ -5,18 +5,17 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 #actual settings of the enigma machine (wikipedia)
-Rotor1 = Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", "Q")
-Rotor2 = Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", "E")
-Rotor3 = Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", "V")
-Rotor4 = Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", "J")
-Rotor5 = Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", "Z")
+Rotor1 = Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", "q")
+Rotor2 = Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", "e")
+Rotor3 = Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", "v")
+Rotor4 = Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", "j")
+Rotor5 = Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", "z")
 
 
 ref = Reflector("EJMZALYXVBWFCRQUONTSPIKHGD")
 
 
 KEYB = Keyboard()
-#PLUGB = plugboard(["PO", "ML", "IU", "KJ", "NH", "YT", "GB", "VF", "RE", "DC"])
 
 PLUGB = {"A": "A", "B": "B", "C": "C", "D": "D",
         "E": "E", "F": "F", "G": "G", "H": "H", 
@@ -27,10 +26,10 @@ PLUGB = {"A": "A", "B": "B", "C": "C", "D": "D",
         "Y": "Y", "Z": "Z"}
 
 def pairs(pair):
-    if len(pair) == 2:  # Ensure the pair is exactly 2 characters
+    if len(pair) == 2:  
         A = pair[0]
         B = pair[1]
-        if A in PLUGB and B in PLUGB:  # Verify both characters are valid
+        if A in PLUGB and B in PLUGB:  
             PLUGB[A] = B
             PLUGB[B] = A
 
@@ -38,7 +37,7 @@ class EnigmaGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Enigma Machine")
-        self.root.geometry("600x400")  # Set window size
+        self.root.geometry("600x700")  # Set window size
         self.pairs_count = 0
         
         try:
@@ -88,8 +87,8 @@ class EnigmaGUI:
             # Display current plugboard state
             active_pairs = []
             for key, value in PLUGB.items():
-                if key < value:  # Only show each pair once
-                    if key != value:  # Only show actual swapped pairs
+                if key < value:  
+                    if key != value: 
                         active_pairs.append(f"{key}-{value}")
             self.output_list.insert(tk.END, f"Current plugboard pairs: {', '.join(active_pairs)}")
             self.output_list.insert(tk.END, "------------------------")
@@ -106,45 +105,43 @@ class EnigmaGUI:
         message = self.message_entry.get().upper()
         output = ""
         
+        #storing the inital position of the rotors
+        initial_position = {"Rotor1": Rotor1.left, 
+                            "Rotor2": Rotor2.left,
+                            "Rotor3": Rotor3.left}
+
+
         for letter in message:
             if letter.isalpha():
-                signal = KEYB.forward(letter)
-                self.output_list.insert(tk.END, f"After KEYB.forward(letter): {signal}")
-                
-                signal = KEYB.forward(PLUGB[letter])
-                self.output_list.insert(tk.END, f"After PLUGB[letter]: {signal}")
-                
-                signal = Rotor3.forward(signal)
-                self.output_list.insert(tk.END, f"After Rotor3.forward: {signal}")
-                
+                if Rotor2.left == Rotor2.notch and Rotor3.left == Rotor3.notch:
+                    Rotor1.rotate()
+                    Rotor2.rotate()
+                    Rotor3.rotate()
+                elif Rotor3.left[0] == Rotor3.notch:
+                    Rotor2.rotate()
+                    Rotor3.rotate()
+                else:
+                    Rotor3.rotate()
+
+                signal = KEYB.forward(letter)               
+                signal = KEYB.forward(PLUGB[letter])               
+                signal = Rotor3.forward(signal)              
                 signal = Rotor2.forward(signal)
-                self.output_list.insert(tk.END, f"After Rotor2.forward: {signal}")
-                
-                signal = Rotor1.forward(signal)
-                self.output_list.insert(tk.END, f"After Rotor1.forward: {signal}")
-                
+                signal = Rotor1.forward(signal)              
                 signal = ref.reflect(signal)
-                self.output_list.insert(tk.END, f"After ref.reflect: {signal}")
-                
-                signal = Rotor1.backward(signal)
-                self.output_list.insert(tk.END, f"After Rotor1.backward: {signal}")
-                
-                signal = Rotor2.backward(signal)
-                self.output_list.insert(tk.END, f"After Rotor2.backward: {signal}")
-                
-                signal = Rotor3.backward(signal)
-                self.output_list.insert(tk.END, f"After Rotor3.backward: {signal}")
-                
+                signal = Rotor1.backward(signal)    
+                signal = Rotor2.backward(signal) 
+                signal = Rotor3.backward(signal) 
                 output_letter = KEYB.backward(signal)
-                self.output_list.insert(tk.END, f"After KEYB.backward: {output_letter}")
-                
                 final_letter = PLUGB[output_letter]
-                self.output_list.insert(tk.END, f"After PLUGB[output_letter]: {final_letter}")
-                
+                Rotor1.left = initial_position["Rotor1"]
+                Rotor2.left = initial_position["Rotor2"]
+                Rotor3.left = initial_position["Rotor3"]
                 output += final_letter
             else:
                 output += letter
-        
+    
+
         self.output_list.insert(tk.END, f"Input: {message}")
         self.output_list.insert(tk.END, f"Output: {output}")
         self.output_list.insert(tk.END, "------------------------")
