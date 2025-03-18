@@ -1,3 +1,4 @@
+#import statements from the other files
 from keyboard import Keyboard
 from Rotor import Rotor
 from reflector import Reflector
@@ -17,6 +18,7 @@ ref = Reflector("EJMZALYXVBWFCRQUONTSPIKHGD")
 
 KEYB = Keyboard()
 
+#dictionary of the plugboard settings
 PLUGB = {"A": "A", "B": "B", "C": "C", "D": "D",
         "E": "E", "F": "F", "G": "G", "H": "H", 
         "I": "I", "J": "J", "K": "K", "L": "L", 
@@ -25,6 +27,7 @@ PLUGB = {"A": "A", "B": "B", "C": "C", "D": "D",
         "U": "U", "V": "V", "W": "W", "X": "X", 
         "Y": "Y", "Z": "Z"}
 
+#function to add pairs to the plugboard
 def pairs(pair):
     if len(pair) == 2:  
         A = pair[0]
@@ -33,6 +36,8 @@ def pairs(pair):
             PLUGB[A] = B
             PLUGB[B] = A
 
+
+#class for the GUI
 class EnigmaGUI:
     def __init__(self, root):
         self.root = root
@@ -110,7 +115,7 @@ class EnigmaGUI:
                             "Rotor2": Rotor2.left,
                             "Rotor3": Rotor3.left}
 
-
+        #looping through the message and encoding each letter with the rotors
         for letter in message:
             if letter.isalpha():
                 if Rotor2.left == Rotor2.notch and Rotor3.left == Rotor3.notch:
@@ -122,6 +127,8 @@ class EnigmaGUI:
                     Rotor3.rotate()
                 else:
                     Rotor3.rotate()
+                
+                #sending the letter through the rotors
 
                 signal = KEYB.forward(letter)               
                 signal = KEYB.forward(PLUGB[letter])               
@@ -141,12 +148,14 @@ class EnigmaGUI:
             else:
                 output += letter
     
-
+        # Display the input message and the encoded output
         self.output_list.insert(tk.END, f"Input: {message}")
         self.output_list.insert(tk.END, f"Output: {output}")
         self.output_list.insert(tk.END, "------------------------")
         self.message_entry.delete(0, tk.END)
 
+
+#main function to drive events
 if __name__ == "__main__":
     try:
         root = tk.Tk()

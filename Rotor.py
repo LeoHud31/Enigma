@@ -17,6 +17,7 @@ class Rotor:
         signal = self.right.find(letter)
         return signal
 
+    #rotate function rotates the rotor by 1 position
     def rotate(self, n=1):
         for i in range(n):
             self.left = self.left[1:] + self.left[0]
