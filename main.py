@@ -12,20 +12,22 @@ Rotor4 = Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", "J")
 Rotor5 = Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", "Z")
 
 
-ref1 = Reflector("EJMZALYXVBWFCRQUONTSPIKHGD")
-ref1 = Reflector("YRUHQSLDPXNGOKMIEBFZCWVJAT")
-ref1 = Reflector("FVPJIAOYEDRZXWGCTKUQSBNMHL")
+ref = Reflector("EJMZALYXVBWFCRQUONTSPIKHGD")
+
 
 KEYB = Keyboard()
 PLUGB = plugboard(["PO", "ML", "IU", "KJ", "NH", "YT", "GB", "VF", "RE", "DC"])
 
-letter = "A"
+
+
+letter = input("Enter a letter: ")
+letter = letter.upper()
 signal = KEYB.forward(letter)
 signal = PLUGB.forward(signal)
 signal = Rotor3.forward(signal)
 signal = Rotor2.forward(signal)
 signal = Rotor1.forward(signal)
-signal = ref1.reflect(signal)
+signal = ref.reflect(signal)
 signal = Rotor1.backward(signal)
 signal = Rotor2.backward(signal)
 signal = Rotor3.backward(signal)
