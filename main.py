@@ -5,7 +5,7 @@ from reflector import Reflector
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-#actual settings of the enigma machine (wikipedia)
+#actual settings of the enigma machine (wikipedia) based on Enigma I introduced in 1930
 Rotor1 = Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", "q")
 Rotor2 = Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", "e")
 Rotor3 = Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", "v")
@@ -50,6 +50,46 @@ class EnigmaGUI:
         except Exception as e:
             messagebox.showerror("Error", f"Failed to setup GUI: {str(e)}")
 
+    def set_rotors(self):
+        # Set the rotor positions
+        rotor1_Option = self.rotor_entry_1
+        rotor2_Option = self.rotor_entry_2
+        rotor3_Option = self.rotor_entry_3
+
+        if rotor1_Option == "1":
+            rotor1_Option = Rotor1
+        elif rotor1_Option == "2":
+            rotor1_Option = Rotor2
+        elif rotor1_Option == "3":
+            rotor1_Option = Rotor3
+        elif rotor1_Option == "4":
+            rotor1_Option = Rotor4
+        elif rotor1_Option == "5":
+            rotor1_Option = Rotor5
+
+        if rotor2_Option == "1":
+            rotor2_Option = Rotor1
+        elif rotor2_Option == "2":
+            rotor2_Option = Rotor2
+        elif rotor2_Option == "3":
+            rotor2_Option = Rotor3
+        elif rotor2_Option == "4":
+            rotor2_Option = Rotor4
+        elif rotor2_Option == "5":
+            rotor2_Option = Rotor5
+        
+        if rotor3_Option == "1":
+            rotor3_Option = Rotor1
+        elif rotor3_Option == "2":
+            rotor3_Option = Rotor2
+        elif rotor3_Option == "3":
+            rotor3_Option = Rotor3
+        elif rotor3_Option == "4":
+            rotor3_Option = Rotor4
+        elif rotor3_Option == "5":
+            rotor3_Option = Rotor5
+        
+
     def setup_gui(self):
         # Plugboard frame
         self.plugboard_frame = ttk.LabelFrame(self.root, text="Plugboard Setup")
@@ -63,6 +103,23 @@ class EnigmaGUI:
         
         self.pair_button = ttk.Button(self.plugboard_frame, text="Add Pair", command=self.add_pair)
         self.pair_button.pack(side="left", padx=5)
+
+        #rotor setup frame
+
+        self.rotor_frame = ttk.Label(self.root)
+        self.rotor_frame.pack(padx=10, pady=5, fill="x")
+
+        self.rotor_entry_1 = ttk.Entry(self.rotor_frame, width=1)
+        self.rotor_entry_1.pack(side="left", padx=5)
+
+        self.rotor_entry_2 = ttk.Entry(self.rotor_frame, width=1)
+        self.rotor_entry_2.pack(side="left", padx=5)
+
+        self.rotor_entry_3 = ttk.Entry(self.rotor_frame, width=1)
+        self.rotor_entry_3.pack(side="left", padx=5)
+
+        self.rotor_button = ttk.Button(self.rotor_frame, text="Set Rotors", command=self.set_rotors)
+        self.rotor_button.pack(side="left", padx=5)
 
         # Message frame
         self.message_frame = ttk.LabelFrame(self.root, text="Message")
@@ -130,15 +187,15 @@ class EnigmaGUI:
                 
                 #sending the letter through the rotors
 
-                signal = KEYB.forward(letter)               
-                signal = KEYB.forward(PLUGB[letter])               
-                signal = Rotor3.forward(signal)              
+                signal = KEYB.forward(letter)       
+                signal = KEYB.forward(PLUGB[letter])          
+                signal = Rotor3.forward(signal)            
                 signal = Rotor2.forward(signal)
-                signal = Rotor1.forward(signal)              
+                signal = Rotor1.forward(signal)        
                 signal = ref.reflect(signal)
-                signal = Rotor1.backward(signal)    
-                signal = Rotor2.backward(signal) 
-                signal = Rotor3.backward(signal) 
+                signal = Rotor1.backward(signal) 
+                signal = Rotor2.backward(signal)
+                signal = Rotor3.backward(signal)
                 output_letter = KEYB.backward(signal)
                 final_letter = PLUGB[output_letter]
                 Rotor1.left = initial_position["Rotor1"]

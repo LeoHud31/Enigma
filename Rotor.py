@@ -22,7 +22,3 @@ class Rotor:
         for i in range(n):
             self.left = self.left[1:] + self.left[0]
             self.right = self.right[1:] + self.right[0]
-
-    def rotate_to_letter(self, letter):
-        n = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".find(letter)
-        self.rotate(n)
