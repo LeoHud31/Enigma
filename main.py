@@ -39,6 +39,8 @@ def pairs(pair):
 
 #class for the GUI
 class EnigmaGUI:
+    #gui for the enigma machine
+    #constructor for the GUI
     def __init__(self, root):
         self.root = root
         self.root.title("Enigma Machine")
@@ -56,6 +58,7 @@ class EnigmaGUI:
         rotor2_Option = self.rotor_entry_2
         rotor3_Option = self.rotor_entry_3
 
+        #nested if statements to set the rotors based on the user input
         if rotor1_Option == "1":
             rotor1_Option = Rotor1
         elif rotor1_Option == "2":
@@ -91,6 +94,7 @@ class EnigmaGUI:
         
 
     def setup_gui(self):
+        #set up the GUI
         # Plugboard frame
         self.plugboard_frame = ttk.LabelFrame(self.root, text="Plugboard Setup")
         self.plugboard_frame.pack(padx=10, pady=5, fill="x")
@@ -138,6 +142,7 @@ class EnigmaGUI:
         self.output_list = tk.Listbox(self.output_frame, height=10)
         self.output_list.pack(padx=5, pady=5, fill="both", expand=True)
 
+    #function to add pairs to the plugboard
     def add_pair(self):
         pair = self.pair_entry.get().upper()
         if len(pair) == 2 and pair[0].isalpha() and pair[1].isalpha():
@@ -163,6 +168,7 @@ class EnigmaGUI:
         else:
             messagebox.showerror("Error", "Please enter exactly 2 letters (e.g. AB)")
 
+    #function to encode the message
     def encode_message(self):
         message = self.message_entry.get().upper()
         output = ""
